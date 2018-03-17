@@ -1,0 +1,27 @@
+{
+    "model_version": "lstm",
+    "lstm_num_units": 64,
+    "is_bidirectionnal": 0,
+    
+    "learning_rate": 2e-4,
+    "train_size": 6933,
+    "eval_size" : 500,
+    "batch_size": 64,
+    "num_epochs": 100,
+    "keep_prob":  0.6,
+    "lambda_l2_reg" : 0.001,
+
+    "save_summary_steps": 100,
+    "num_train_shards": 7,
+    "num_dev_shards"  : 1, 
+    "num_test_shards" : 1,
+    
+    "max_len_sequence":  4782,
+    "delay_time_min"  :  300, 
+    "n_features_spikeRaster"  : 96,
+    "n_features_spikeRaster2" : 96,
+    "n_total_features" : 192,
+    "num_classes": 48,
+
+    "model_with_quadrants": 0
+}
