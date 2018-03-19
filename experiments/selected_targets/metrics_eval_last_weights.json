@@ -1,0 +1,7 @@
+{
+    "accuracy_top_5": 1.0, 
+    "accuracy": 0.7666666507720947, 
+    "loss": 0.5680673718452454, 
+    "accuracy_top_10": 1.0, 
+    "accuracy_top_3": 1.0
+}
