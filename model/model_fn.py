@@ -18,7 +18,6 @@ def build_model(mode, inputs, params):
     spike_neurons  = inputs['spike_neurons']
     is_training  = (mode == 'train')
     if params.model_version == 'lstm':
-        
         if is_training:
             keep_prob = params.keep_prob
         else:
@@ -49,6 +48,11 @@ def build_model(mode, inputs, params):
             fwd_LSTM_cell = tf.nn.rnn_cell.BasicLSTMCell(params.lstm_num_units)
             fwd_dropout_cell = tf.nn.rnn_cell.DropoutWrapper(fwd_LSTM_cell, 
                                           input_keep_prob=keep_prob, output_keep_prob=keep_prob)
+            try:
+                if (params.num_layers>1):
+                    fwd_dropout_cell = tf.contrib.rnn.MultiRNNCell([fw_dropout_cell] * num_layers, state_is_tuple=True)
+	    except:
+		pass
             output, output_state = tf.nn.dynamic_rnn( 
                                      fwd_dropout_cell,
                                      spike_neurons,
