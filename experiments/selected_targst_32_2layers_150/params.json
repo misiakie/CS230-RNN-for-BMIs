@@ -2,7 +2,7 @@
     "model_version": "lstm",
     "lstm_num_units": 32,
     "is_bidirectionnal": 0,
-    "num_layers" : 2
+    "num_layers" : 2,
 
     "learning_rate": 5e-4,
     "batch_size": 32,
