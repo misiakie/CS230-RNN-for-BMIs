@@ -53,7 +53,6 @@ def build_model(mode, inputs, params):
                 if (params.num_layers>1):
                     LSTM_cell = tf.contrib.rnn.MultiRNNCell(
                             [make_cell(params.num_layers) for n_layer in params.num_layers])
-                    print(params.num_layers)
             except:
                 LSTM_cell = make_cell(params.lstm_num_units)
                 
