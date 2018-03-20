@@ -20,6 +20,7 @@ Given the premovement neural activity of 192 neurons monitored for a given perio
 python build_data.py
 ```
 
+1Bis. __Data Already processed for tensorflow__ If your data is already under the format .tfrecords, you only need to put it in the folder `data`, and move on to step 2.
 
 2. __Your first experiment__ We created a `base_model` directory for you under the `experiments` directory. It countains a file `params.json` which sets the parameters for the experiment. It looks like
 ```json
@@ -31,13 +32,16 @@ python build_data.py
 ```
 For every new experiment, you will need to create a new directory under `experiments` with a `params.json` file.
 
-3. __Train__ your experiment. Simply run
+3. __Train__ your experiment. If your data in in `data/my_folder`, simply run
 ```
-python train.py --model_dir experiments/base_model
+python train.py --model_dir experiments/base_model --data_dir data/my_folder
 ```
 It will instantiate a model and train it on the training set following the parameters specified in `params.json`. It will also evaluate some metrics on the development set, especially the accuracy, the 'Top 3' accuracy and so on.
 
-
+If you want to reuse the weights from a past experiment you can use the `--restore_dir` option, precising the folder in which your weights have been saved (generally `experiments/my_model/my_weights`), for instance:
+```
+python train.py --model_dir experiments/base_model --data_dir data/my_folder --restore_dir experiments/base_model/best_weights
+```
 ## Credits
 
 The code architecture was taken from the "Named Entity Recognition with Tensorflow" project by Guillaume Genthial and Olivier Moindrot (see https://cs230-stanford.github.io).
