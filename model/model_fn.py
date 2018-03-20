@@ -50,9 +50,10 @@ def build_model(mode, inputs, params):
                                           input_keep_prob=keep_prob, output_keep_prob=keep_prob)
             try:
                 if (params.num_layers>1):
-                    fwd_dropout_cell = tf.contrib.rnn.MultiRNNCell([fw_dropout_cell] * num_layers, state_is_tuple=True)
-	    except:
-		pass
+                    fwd_dropout_cell = tf.contrib.rnn.MultiRNNCell([fwd_dropout_cell] * params.num_layers,
+                                                                   state_is_tuple=True)
+            except:
+                pass
             output, output_state = tf.nn.dynamic_rnn( 
                                      fwd_dropout_cell,
                                      spike_neurons,
