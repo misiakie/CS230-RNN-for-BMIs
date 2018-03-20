@@ -19,7 +19,8 @@ Given the premovement neural activity of 192 neurons monitored for a given perio
 ```
 python build_data.py
 ```
-1.Bis __Data Already processed for tensorflow__ If your data is already under the format .tfrecords, you only need to put it in the folder data of the project, and move on to step 2.
+
+1. Bis __Data Already processed for tensorflow__ If your data is already under the format .tfrecords, you only need to put it in the folder data of the project, and move on to step 2.
 
 2. __Your first experiment__ We created a `base_model` directory for you under the `experiments` directory. It countains a file `params.json` which sets the parameters for the experiment. It looks like
 ```json
