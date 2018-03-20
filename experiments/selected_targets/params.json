@@ -4,7 +4,7 @@
     "is_bidirectionnal": 0,
     
     "learning_rate": 5e-4,
-    "batch_size": 64,
+    "batch_size": 32,
     "num_epochs": 100,
     "keep_prob":  0.6,
     "lambda_l2_reg" : 0.001,
