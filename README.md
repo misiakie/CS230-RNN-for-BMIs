@@ -37,7 +37,7 @@ python train.py --model_dir experiments/base_model --data_dir data/my_folder
 ```
 It will instantiate a model and train it on the training set following the parameters specified in `params.json`. It will also evaluate some metrics on the development set, especially the accuracy, the 'Top 3' accuracy and so on.
 
-If you want to reuse the weights from a past experiment you can use the `--restore_dir experiments/my_model/my_weights` option, for instance:
+If you want to reuse the weights from a past experiment you can use the `--restore_dir` option, precising the folder in which your weights have been saved (generally `experiments/my_model/my_weights`), for instance:
 ```
 python train.py --model_dir experiments/base_model --data_dir data/my_folder --restore_dir experiments/base_model/best_weights
 ```
