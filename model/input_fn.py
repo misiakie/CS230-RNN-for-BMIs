@@ -17,6 +17,10 @@ def input_fn(mode, filenames, params):
     
     is_training             = (mode=='train')
     delay_time_min          = params.delay_time_min
+    try:
+        delay_after_start   = params.delay_after_start
+    except:
+        delay_after_start   = 0
     n_features_spikeRaster  = params.n_features_spikeRaster
     n_features_spikeRaster2 = params.n_features_spikeRaster2
     max_len_sequence        = params.max_len_sequence
@@ -44,22 +48,22 @@ def input_fn(mode, filenames, params):
         parsed_features = tf.parse_single_example(example_proto, features)
         
         # Predictive period => from timeTargetOn to delay_time_in
-        begin_time   = tf.cast(parsed_features["timeTargetOn"], tf.int64)
+        begin_time   = tf.cast(parsed_features["timeTargetOn"], tf.int64)+delay_after_start
         begin_sparse = tf.pad(begin_time, [[1,0]], 'CONSTANT')
         
         # Preprocess spikeRaster => [Time Series n_steps x n_features_spikeRaster]
         spikeRaster = tf.sparse_slice(parsed_features["spikeRaster"],
-                                      begin_sparse,[n_features_spikeRaster,delay_time_min])
+                                      begin_sparse,[n_features_spikeRaster,delay_time_min-delay_after_start])
         spikeRaster = tf.sparse_tensor_to_dense(spikeRaster)
         spikeRaster = tf.transpose(spikeRaster)
-        spikeRaster.set_shape((delay_time_min, n_features_spikeRaster))
+        spikeRaster.set_shape((delay_time_min-delay_after_start, n_features_spikeRaster))
     
         # Preprocess spikeRaster2 => [Time Series n_steps x n_features_spikeRaster]
         spikeRaster2 = tf.sparse_slice(parsed_features["spikeRaster2"],
-                                       begin_sparse,[n_features_spikeRaster2,delay_time_min])
+                                       begin_sparse,[n_features_spikeRaster2,delay_time_min-delay_after_start])
         spikeRaster2 = tf.sparse_tensor_to_dense(spikeRaster2)
         spikeRaster2 = tf.transpose(spikeRaster2)
-        spikeRaster2.set_shape((delay_time_min, n_features_spikeRaster2))
+        spikeRaster2.set_shape((delay_time_min-delay_after_start, n_features_spikeRaster2))
     
         # Combine spikeRaster + spikeRaster2
         spikeRasters = tf.concat([spikeRaster,spikeRaster2], axis=1)
@@ -119,7 +123,7 @@ def input_fn(mode, filenames, params):
     inputs = {
         'spike_neurons': spike_neurons,
         'numTarget': numTarget,
-        'label': label,
+        'label':     label,
         'targetPos': targetPos,
         'delayTime': delayTime,
         'isSuccessful': isSuccessful,
