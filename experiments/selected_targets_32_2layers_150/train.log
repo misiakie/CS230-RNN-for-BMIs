@@ -1,0 +1,52 @@
+2018-03-20 15:55:47,205:INFO: Creating the datasets...
+2018-03-20 15:55:47,231:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 15:55:47,232:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 15:55:47,481:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 15:55:47,482:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 15:55:47,742:INFO: - done.
+2018-03-20 15:55:47,743:INFO: Creating the model...
+2018-03-20 15:56:51,936:INFO: Creating the datasets...
+2018-03-20 15:56:51,958:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 15:56:51,959:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 15:56:52,202:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 15:56:52,203:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 15:56:52,451:INFO: - done.
+2018-03-20 15:56:52,451:INFO: Creating the model...
+2018-03-20 16:09:15,415:INFO: Creating the datasets...
+2018-03-20 16:09:15,439:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:09:15,439:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:09:15,713:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:09:15,713:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:09:15,967:INFO: - done.
+2018-03-20 16:09:15,967:INFO: Creating the model...
+2018-03-20 16:10:07,037:INFO: Creating the datasets...
+2018-03-20 16:10:07,062:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:10:07,062:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:10:07,296:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:10:07,296:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:10:07,531:INFO: - done.
+2018-03-20 16:10:07,531:INFO: Creating the model...
+2018-03-20 16:11:52,884:INFO: Creating the datasets...
+2018-03-20 16:11:52,905:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:11:52,905:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:11:53,144:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:11:53,144:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:11:53,385:INFO: - done.
+2018-03-20 16:11:53,385:INFO: Creating the model...
+2018-03-20 16:17:19,495:INFO: Creating the datasets...
+2018-03-20 16:17:19,519:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:17:19,519:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:17:19,789:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:17:19,789:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:17:20,043:INFO: - done.
+2018-03-20 16:17:20,043:INFO: Creating the model...
+2018-03-20 16:23:14,701:INFO: Creating the datasets...
+2018-03-20 16:23:14,727:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:23:14,727:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:23:14,980:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:23:14,980:WARNING: SparseFeature is a complicated feature config and should only be used after careful consideration of VarLenFeature.
+2018-03-20 16:23:15,221:INFO: - done.
+2018-03-20 16:23:15,221:INFO: Creating the model...
+2018-03-20 16:23:18,150:INFO: - done.
+2018-03-20 16:23:18,150:INFO: Starting training for 100 epoch(s)
+2018-03-20 16:23:25,261:INFO: Epoch 1/100

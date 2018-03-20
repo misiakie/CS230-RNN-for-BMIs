@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     # Load the parameters from the dataset, that gives the size etc. into params
     json_path = os.path.join(args.data_dir, 'dataset_params.json')
-    assert os.path.isfile(json_path), "No json file found at {}, run build_vocab.py".format(json_path)
+    assert os.path.isfile(json_path), "No json file found at {}".format(json_path)
     params.update(json_path)
 
     # Check that we are not overwriting some previous experiment
