@@ -3,7 +3,7 @@
     "lstm_num_units": 48,
     "is_bidirectionnal": 0,
     
-    "learning_rate": 5e-4,
+    "learning_rate": 1e-3,
     "batch_size": 32,
     "num_epochs": 100,
     "keep_prob":  0.7,
