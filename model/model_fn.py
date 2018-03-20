@@ -15,7 +15,7 @@ def build_model(mode, inputs, params):
     Returns:
         output: (tf.Tensor) output of the model
     """
-    neurons_act  = inputs['neurons_activity']
+    spike_neurons  = inputs['spike_neurons']
     is_training  = (mode == 'train')
     if params.model_version == 'lstm':
         
@@ -37,7 +37,7 @@ def build_model(mode, inputs, params):
             outputs, outputs_states = tf.nn.bidirectional_dynamic_rnn(
                                         fwd_dropout_cell,
                                         bwd_dropout_cell,
-                                        neurons_act,
+                                        spike_neurons,
                                         dtype = tf.float32)
         
             state_fw, state_bw = outputs_states
@@ -51,7 +51,7 @@ def build_model(mode, inputs, params):
                                           input_keep_prob=keep_prob, output_keep_prob=keep_prob)
             output, output_state = tf.nn.dynamic_rnn( 
                                      fwd_dropout_cell,
-                                     neurons_act,
+                                     spike_neurons,
                                      dtype = tf.float32)
             c_fw, h = output_state
         
@@ -94,7 +94,7 @@ def model_fn(mode, inputs, params, reuse=False):
         # Compute the output distribution of the model and the predictions
         logits = build_model(mode, inputs, params)
 
-    # Define loss and accuracy (we need to apply a mask to account for padding)
+    # Define loss and accuracy depending on the model we want to use
     is_acceptable_try = tf.reshape(tf.logical_and(isSuccessful, (delayTime>=params.delay_time_min)), [-1])
 
     if params.model_with_quadrants:
@@ -125,15 +125,27 @@ def model_fn(mode, inputs, params, reuse=False):
         label_circle = tf.cast(tf.argmax(label[:,:3], axis=1), tf.int32)
         label_quadrant = tf.cast(tf.argmax(label[:,3:7], axis=1), tf.int32)
         label_angle = tf.cast(tf.argmax(label[:,7:], axis=1), tf.int32)
-    
-        accuracy_circle = tf.reduce_mean(tf.cast(tf.equal(predicted_circle, label_circle), tf.float32))
-        accuracy_quadrant = tf.reduce_mean(tf.cast(tf.equal(predicted_quadrant, label_quadrant), tf.float32))
-        accuracy_angle = tf.reduce_mean(tf.cast(tf.equal(predicted_angle, label_angle), tf.float32))  
+        
+        is_right_circle   = tf.equal(predicted_circle, label_circle)
+        is_right_quadrant = tf.equal(predicted_quadrant, label_quadrant)
+        is_right_angle    = tf.equal(predicted_angle, label_angle)
+        is_right_target   = tf.logical_and(is_right_angle,
+                                           tf.logical_and(is_right_quadrant, is_right_circle))
+        
+        accuracy_circle   = tf.reduce_mean(tf.boolean_mask(tf.cast(is_right_circle, tf.float32),
+                                            is_acceptable_try))
+        accuracy_quadrant = tf.reduce_mean(tf.boolean_mask(tf.cast(is_right_quadrant, tf.float32),
+                                            is_acceptable_try))
+        accuracy_angle    = tf.reduce_mean(tf.boolean_mask(tf.cast(is_right_angle, tf.float32),
+                                            is_acceptable_try))
+        accuracy          = tf.reduce_mean(tf.boolean_mask(tf.cast(is_right_target, tf.float32),
+                                            is_acceptable_try))
         
     else:
         predicted_target= tf.argmax(logits, axis=1)
         accuracy        = tf.reduce_mean(tf.cast(tf.boolean_mask(
-                tf.nn.in_top_k(logits, numTarget, 1 ), is_acceptable_try), tf.float32))
+                            tf.nn.in_top_k(logits, numTarget, 1 ), is_acceptable_try),
+                            tf.float32))
     
     # Define training step that minimizes the loss with the Adam optimizer
     if is_training:
@@ -148,9 +160,13 @@ def model_fn(mode, inputs, params, reuse=False):
     with tf.variable_scope("metrics"):
         if params.model_with_quadrants:
             metrics = {
-                'accuracy_circle': accuracy_circle,
-                'accuracy_quadrant': accuracy_quadrant,
-                'accuracy_angle': accuracy_angle,
+                'accuracy_circle': tf.metrics.accuracy(labels=label_circle, predictions=predicted_circle,
+                                                weights=tf.cast(is_acceptable_try, tf.float32)),
+                'accuracy_quadrant': tf.metrics.accuracy(labels=label_quadrant, predictions=predicted_quadrant,
+                                                weights=tf.cast(is_acceptable_try, tf.float32)),
+                'accuracy_angle': tf.metrics.accuracy(labels=label_angle, predictions=predicted_angle,
+                                                weights=tf.cast(is_acceptable_try, tf.float32)),
+                'accuracy': tf.metrics.mean(is_right_target, weights=tf.cast(is_acceptable_try, tf.float32)),                                         
                 'loss': tf.metrics.mean(loss)
             }
             
@@ -193,15 +209,15 @@ def model_fn(mode, inputs, params, reuse=False):
     model_spec = inputs
     variable_init_op = tf.group(*[tf.global_variables_initializer(), tf.tables_initializer()])
     model_spec['variable_init_op'] = variable_init_op
-    model_spec["predictions"] = predicted_target
-    model_spec['loss'] = loss
+    model_spec['loss']             = loss
+    model_spec['accuracy']         = accuracy
+    
     if params.model_with_quadrants:
         model_spec['accuracy_circle']  = accuracy_circle
         model_spec['accuracy_quadrant']= accuracy_quadrant
         model_spec['accuracy_angle']   = accuracy_angle
-        
     else:
-        model_spec['accuracy'] = accuracy
+        model_spec["predictions"] = predicted_target
         
     model_spec['metrics_init_op'] = metrics_init_op
     model_spec['metrics'] = metrics

@@ -2,6 +2,8 @@
 
 import tensorflow as tf
 import numpy as np
+import os
+
 def input_fn(mode, filenames, params):
     """Input function for our model
 
@@ -12,7 +14,8 @@ def input_fn(mode, filenames, params):
         params: (Params) contains hyperparameters of the model (ex: `params.num_epochs`)
 
     """
-        
+    
+    is_training             = (mode=='train')
     delay_time_min          = params.delay_time_min
     n_features_spikeRaster  = params.n_features_spikeRaster
     n_features_spikeRaster2 = params.n_features_spikeRaster2
@@ -74,10 +77,10 @@ def input_fn(mode, filenames, params):
         
         # label in case model with Quadrants
         if params.model_with_quadrants:
-            circle_mapping = np.load('Params/circle.npy')
-            angle_mapping = np.load('Params/angle_in_quadrant.npy')
-            quadrant_mapping = np.load('Params/quadrants.npy')
-            label_mapping = np.concatenate([circle_mapping,quadrant_mapping, angle_mapping], axis=1)
+            circle_mapping   = np.load(os.path.join(params.mapping,'circle.npy'))
+            angle_mapping    = np.load(os.path.join(params.mapping,'angle_in_quadrant.npy'))
+            quadrant_mapping = np.load(os.path.join(params.mapping,'quadrants.npy'))
+            label_mapping    = np.concatenate([circle_mapping,quadrant_mapping, angle_mapping], axis=1)
             label_mapping_tensor = tf.placeholder_with_default(label_mapping, [48,11])
         
         else:
@@ -91,24 +94,30 @@ def input_fn(mode, filenames, params):
         # Preprocess target_pos
         return spikeRasters, isSuccessful, targetPos, numTarget, label, delayTime
 
-    
-    size_batch = params.batch_size
-    
+        
     dataset = tf.data.TFRecordDataset(filenames)
     dataset = dataset.map(_parse_function)
     
-    dataset = dataset.shuffle(buffer_size=1000)
-    dataset = dataset.batch(size_batch)
+    if is_training:
+        dataset = dataset.shuffle(buffer_size=params.train_size)
+        
+    dataset = dataset.batch(params.batch_size)
     
     iterator = dataset.make_initializable_iterator()
     
-    inputs, isSuccessful, targetPos, numTarget, label, delayTime = iterator.get_next()
+    spike_neurons, isSuccessful, targetPos, numTarget, label, delayTime = iterator.get_next()
 
     init_op = iterator.initializer
 
+    if params.choose_target:
+        assert(params.num_classes == len(params.target))
+        target = tf.constant(params.target, dtype=tf.int64)
+        mappingTarget = tf.argmax(tf.cast(tf.equal(numTarget, tf.expand_dims(target,1)),tf.uint16),0)
+        numTarget = tf.gather(tf.range(params.num_classes),mappingTarget)
+        
     # Build and return a dictionnary containing the nodes / ops
     inputs = {
-        'neurons_activity': inputs,
+        'spike_neurons': spike_neurons,
         'numTarget': numTarget,
         'label': label,
         'targetPos': targetPos,
